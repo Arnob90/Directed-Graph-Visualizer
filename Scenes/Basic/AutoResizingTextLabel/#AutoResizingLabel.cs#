@@ -1,0 +1,23 @@
+using Godot;
+using System;
+
+public partial class AutoResizingLabel : Control
+{
+	[Export]
+	public Label MainLabel;
+	[Export]
+	public double WordsRequiredToFitIn100Px=50;
+	public override void _Ready()
+	{
+	}
+	private void CalculateAndUpdateSize()
+	{
+		//In 100px, let, we have x words
+		//In 1 px, we need to fix x/100 words
+		//In n
+	}
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
+}

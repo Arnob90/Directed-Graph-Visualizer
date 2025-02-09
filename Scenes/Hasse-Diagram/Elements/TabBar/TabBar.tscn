@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://b26gc5so3eda4"]
+
+[ext_resource type="Script" path="res://Scenes/Hasse-Diagram/Elements/TabBar/NetworkFileOpener.cs" id="1_u0pn8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jih6d"]
+bg_color = Color(0, 0.310755, 0.523758, 1)
+border_width_top = 2
+
+[sub_resource type="Theme" id="Theme_e3oyv"]
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_jih6d")
+
+[node name="TabContainer" type="TabContainer"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -151.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_e3oyv")
+current_tab = 0
+
+[node name="Import" type="MarginContainer" parent="."]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Import"]
+layout_mode = 2
+
+[node name="Explainer1" type="Label" parent="Import/VBoxContainer"]
+layout_mode = 2
+text = "Import Directly From Set"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Import/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter Set Relation Ex: {(1,2),(3,4)}"
+
+[node name="Explainer2" type="Label" parent="Import/VBoxContainer"]
+layout_mode = 2
+text = "Import From Network File"
+horizontal_alignment = 1
+
+[node name="NetworkFileOpener" type="Button" parent="Import/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "From Network File"
+script = ExtResource("1_u0pn8")
+
+[node name="FileDialog" type="FileDialog" parent="Import/VBoxContainer/NetworkFileOpener"]
+unique_name_in_owner = true
+
+[node name="Elements" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

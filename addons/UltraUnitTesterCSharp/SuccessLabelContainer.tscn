@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfl4q7qk7aq4"]
+
+[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/SuccessLabelContainer.cs" id="1_77u25"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8j3w"]
+bg_color = Color(0.309545, 0.794806, 0, 1)
+
+[node name="SuccessLabelContainer" type="PanelContainer" node_paths=PackedStringArray("SuccessLabel")]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_h8j3w")
+script = ExtResource("1_77u25")
+SuccessLabel = NodePath("SuccessLabel")
+
+[node name="SuccessLabel" type="Label" parent="."]
+layout_mode = 2
+text = "Lorem Ipsum"

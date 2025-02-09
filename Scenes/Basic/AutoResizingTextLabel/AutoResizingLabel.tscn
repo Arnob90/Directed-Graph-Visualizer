@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdoefsb2ikfcr"]
+
+[ext_resource type="Script" path="res://Scenes/Basic/AutoResizingTextLabel/AutoResizingLabel.cs" id="1_qaoi0"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_rpvd3"]
+
+[node name="AutoResizingLabel" type="Control" node_paths=PackedStringArray("MainLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qaoi0")
+MainLabel = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Hello There"
+label_settings = SubResource("LabelSettings_rpvd3")
