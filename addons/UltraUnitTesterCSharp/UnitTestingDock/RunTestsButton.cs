@@ -9,7 +9,7 @@ public partial class RunTestsButton : Button
     TestResultContainer ToAddTestsTo;
     public override void _Ready()
     {
-		GD.Print("I am ready");
+        GD.Print("I am ready");
         Pressed += OnPress;
     }
 
@@ -18,11 +18,6 @@ public partial class RunTestsButton : Button
     }
     public void OnPress()
     {
-		GD.Print("Pressed");
-        var results = TestRunner.RunTests(TestRunner.FindMethodsToTest());
-        foreach (var result in results)
-        {
-            ToAddTestsTo.AddTestResult(result);
-        }
+        ToAddTestsTo.RunTests();
     }
 }
