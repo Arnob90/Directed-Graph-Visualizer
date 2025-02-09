@@ -112,4 +112,17 @@ public record Relation<DomainType, CodomainType> where DomainType : notnull wher
     {
         return ConvertToNormalForm().Contains(edge);
     }
+    public override string ToString()
+    {
+        var relationSet = ConvertToNormalForm();
+        var finalStr = "{";
+        foreach (var pair in relationSet)
+        {
+            finalStr += ($"({pair.Item1},{pair.Item2}),");
+        }
+        finalStr = finalStr[..^1];
+        finalStr += "}";
+        finalStr = finalStr.Trim();
+        return finalStr;
+    }
 }

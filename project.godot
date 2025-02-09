@@ -26,7 +26,7 @@ project/assembly_name="Graphs-Diagrams-Visualizer"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-plugin-refresher/plugin.cfg", "res://addons/ultraunittestercsharp/plugin.cfg")
+enabled=PackedStringArray("res://addons/UltraUnitTesterCSharp/plugin.cfg", "res://addons/godot-plugin-refresher/plugin.cfg")
 
 [input]
 

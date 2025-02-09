@@ -1,12 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://d1dtleug3daii"]
+[gd_scene load_steps=5 format=3 uid="uid://d1dtleug3daii"]
 
 [ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/UnitTestingDock.cs" id="1_j62h7"]
 [ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RunTestsButton.cs" id="1_qpvqc"]
 [ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/TestResultContainer.cs" id="2_ghcl8"]
-[ext_resource type="Texture2D" uid="uid://d1s5rr35ofind" path="res://assets/LoopButtonSmall.png" id="3_iho3q"]
-[ext_resource type="PackedScene" uid="uid://dfl4q7qk7aq4" path="res://addons/UltraUnitTesterCSharp/SuccessLabelContainer.tscn" id="3_retkb"]
 [ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RefreshButton.cs" id="4_6wf0e"]
-[ext_resource type="PackedScene" uid="uid://cajnyqlt8atg3" path="res://addons/UltraUnitTesterCSharp/FailureLabelContainer.tscn" id="4_kwj1p"]
 
 [node name="UnitTestingDock" type="PanelContainer"]
 anchors_preset = 15
@@ -18,7 +15,6 @@ script = ExtResource("1_j62h7")
 
 [node name="MainContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_vertical = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainContainer"]
 layout_mode = 2
@@ -31,14 +27,14 @@ text = "Run Tests"
 script = ExtResource("1_qpvqc")
 ToAddTestsTo = NodePath("../../TestResultContainer")
 
-[node name="RefreshButton" type="TextureButton" parent="MainContainer/HBoxContainer"]
+[node name="RefreshButton" type="Button" parent="MainContainer/HBoxContainer" node_paths=PackedStringArray("TestResultsToRefresh")]
 layout_mode = 2
-texture_normal = ExtResource("3_iho3q")
+text = "Refresh"
 script = ExtResource("4_6wf0e")
+TestResultsToRefresh = NodePath("../../TestResultContainer")
 
-[node name="TestResultContainer" type="VBoxContainer" parent="MainContainer"]
+[node name="TestResultContainer" type="Tree" parent="MainContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+hide_root = true
 script = ExtResource("2_ghcl8")
-TestSucceedLabelScene = ExtResource("3_retkb")
-TestFailLabelScene = ExtResource("4_kwj1p")
-TestExceptLabelScene = ExtResource("4_kwj1p")

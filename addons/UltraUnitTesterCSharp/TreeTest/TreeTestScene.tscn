@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cct3yl5dsi4v4"]
+
+[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/TreeTest/TreeTestScene.cs" id="1_acmv8"]
+
+[node name="TreeTestScene" type="Tree"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scroll_horizontal_enabled = false
+scroll_vertical_enabled = false
+script = ExtResource("1_acmv8")

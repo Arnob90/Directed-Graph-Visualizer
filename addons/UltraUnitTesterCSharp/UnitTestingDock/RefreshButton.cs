@@ -2,7 +2,8 @@ using Godot;
 using System;
 using UltraUnitTesterSpace;
 using UltraUnitTesterSpace.UiSpace;
-public partial class RefreshButton : TextureButton
+[Tool]
+public partial class RefreshButton : Button
 {
     [Export]
     TestResultContainer TestResultsToRefresh;
@@ -12,6 +13,7 @@ public partial class RefreshButton : TextureButton
     }
     public void OnPress()
     {
+        GD.Print("Refreshing...");
         TestResultsToRefresh.RefreshFunctionList();
     }
 

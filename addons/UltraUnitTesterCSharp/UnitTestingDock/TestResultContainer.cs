@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -8,49 +9,44 @@ using ResultLabelUISpace;
 using UltraUnitTesterSpace.UiSpace;
 namespace UltraUnitTesterSpace.UiSpace;
 [Tool]
-public partial class TestResultContainer : VBoxContainer
+public partial class TestResultContainer : Tree
 {
-    PackedScene ResultContainerScene;
+    TreeItem Root;
+    List<MethodInfo> Functions;
     public override void _Ready()
     {
+        Functions = new();
+        Root = CreateItem();
+        HideRoot = true;
         RefreshFunctionList();
+    }
+    private void ClearFunctionInfo()
+    {
+        Clear();
+        Root = CreateItem();
     }
     public void RefreshFunctionList()
     {
-        var functionList = TestRunner.FindMethodsToTest();
-        foreach (var function in functionList)
+        ClearFunctionInfo();
+        foreach (var method in TestRunner.FindMethodsToTest())
         {
-            var resultContainer = ResultContainerScene.Instantiate<FunctionInfoContainer>();
-            AddChild(resultContainer);
-            resultContainer.SetFunction(function);
+            Functions.Add(method);
+            var child = Root.CreateChild();
+            child.SetText(0, $"{method.Name}:{method.DeclaringType.FullName}");
         }
     }
-
-    private List<FunctionInfoContainer> GetAllTestContainers()
-    {
-        var requiredContainers = new List<FunctionInfoContainer>();
-        foreach (var child in GetChildren())
-        {
-            if (child is FunctionInfoContainer requiredContainer)
-            {
-                requiredContainers.Add(requiredContainer);
-            }
-        }
-        return requiredContainers;
-    }
-
     public void RunTests()
     {
         RefreshFunctionList();
-        var functionList = TestRunner.FindMethodsToTest();
-        var results = TestRunner.RunTests(functionList);
-        var containers = GetAllTestContainers();
-        foreach (var container in containers)
+        var testResults = TestRunner.RunTests(Functions);
+        var nextNode = Root.GetFirstChild();
+        int i = 0;
+        while (nextNode != null)
         {
-            var underlyingMethod = container.GetFunction();
-            var indexInList = functionList.FindIndex((elem) => elem == underlyingMethod);
-            var result = results[indexInList];
-            container.LogResult(result);
+            var logText = nextNode.CreateChild();
+            logText.SetText(0, testResults[i].Message);
+            i = i + 1;
+            nextNode = nextNode.GetNext();
         }
     }
 }
