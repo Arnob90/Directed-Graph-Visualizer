@@ -1,0 +1,106 @@
+[gd_scene load_steps=9 format=3 uid="uid://twoyfyao7a7o"]
+
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MainUi.cs" id="1_1bm7w"]
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ExplorableCamera.cs" id="1_hbhh4"]
+[ext_resource type="Texture2D" uid="uid://dm5tjuuinhmf0" path="res://assets/LoopButton/LoopButtonSmall.png" id="2_1s3r6"]
+[ext_resource type="PackedScene" uid="uid://bdesiqvclib8t" path="res://Scenes/DirectedGraph/Elements/DiagramNode.tscn" id="2_gbbs1"]
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MouseMovementManager.cs" id="2_i7o4o"]
+[ext_resource type="PackedScene" uid="uid://brl07y0lo1qxy" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.tscn" id="3_5oloh"]
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MouseZoomManager.cs" id="3_ceve0"]
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ResetZoomButton.cs" id="3_q6lx8"]
+
+[node name="MainUi" type="Node2D"]
+script = ExtResource("1_1bm7w")
+DiagramNodeScene = ExtResource("2_gbbs1")
+DirectionalLineScene = ExtResource("3_5oloh")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 927.0
+offset_top = 517.0
+offset_right = 1007.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "I'm a label"
+
+[node name="ExplorableCamera" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("1_hbhh4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="ExplorableCamera"]
+
+[node name="HBoxContainer" type="VBoxContainer" parent="ExplorableCamera/CanvasLayer"]
+offset_right = 249.0
+offset_bottom = 96.0
+
+[node name="PositionLabel" type="Label" parent="ExplorableCamera/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+text = "Position Label"
+
+[node name="HFlowContainer" type="HFlowContainer" parent="ExplorableCamera/CanvasLayer/HBoxContainer"]
+layout_mode = 2
+
+[node name="ZoomLabel" type="Label" parent="ExplorableCamera/CanvasLayer/HBoxContainer/HFlowContainer"]
+layout_mode = 2
+text = "Zoom Label"
+
+[node name="ResetZoomButton" type="TextureButton" parent="ExplorableCamera/CanvasLayer/HBoxContainer/HFlowContainer" node_paths=PackedStringArray("CameraToResetZoomOf")]
+layout_mode = 2
+texture_normal = ExtResource("2_1s3r6")
+stretch_mode = 5
+script = ExtResource("3_q6lx8")
+CameraToResetZoomOf = NodePath("../../../..")
+
+[node name="MouseMovementManager" type="Node2D" parent="ExplorableCamera" node_paths=PackedStringArray("CameraToManage", "PositionLabel")]
+script = ExtResource("2_i7o4o")
+CameraToManage = NodePath("..")
+PositionLabel = NodePath("../CanvasLayer/HBoxContainer/PositionLabel")
+
+[node name="MouseZoomManager" type="Node2D" parent="ExplorableCamera" node_paths=PackedStringArray("CameraToControlZoomOf", "ZoomLabel")]
+script = ExtResource("3_ceve0")
+CameraToControlZoomOf = NodePath("..")
+ZoomMultiplier = 1.15
+ZoomLabel = NodePath("../CanvasLayer/HBoxContainer/HFlowContainer/ZoomLabel")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VSplitContainer" type="VSplitContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="CanvasLayer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VSplitContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+current_tab = 0
+tab_focus_mode = 1
+
+[node name="Import" type="VBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+layout_mode = 2
+placeholder_text = "Import From Relation Directly"
+
+[node name="ImportButton" type="Button" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Import"

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwxatjxvdfi2f"]
+
+[ext_resource type="Script" path="res://Scenes/Tests/CurveDraw.cs" id="1_51w6x"]
+
+[sub_resource type="Curve2D" id="Curve2D_x1mis"]
+bake_interval = 500.0
+
+[node name="CurveDraw" type="Node2D"]
+script = ExtResource("1_51w6x")
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2(17, 10)
+curve = SubResource("Curve2D_x1mis")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(141, 146)
+rotation = 1.10715

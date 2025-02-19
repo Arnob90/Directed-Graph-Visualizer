@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdesiqvclib8t"]
+
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/Elements/DiagramNode.cs" id="1_xdcl3"]
+[ext_resource type="PackedScene" uid="uid://qfp74wdam4oh" path="res://Scenes/DirectedGraph/Elements/CircularLineTest.tscn" id="2_o3iei"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nywek"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="DiagramNode" type="Node2D" node_paths=PackedStringArray("TextLabel", "MainContainer", "UpAnchor", "DownAnchor", "LeftAnchor", "RightAnchor", "CenterAnchor")]
+script = ExtResource("1_xdcl3")
+TextLabel = NodePath("PanelContainer/MarginContainer/CenterContainer/TextLabel")
+MainContainer = NodePath("PanelContainer")
+UpAnchor = NodePath("UpAnchor")
+DownAnchor = NodePath("DownAnchor")
+LeftAnchor = NodePath("LeftAnchor")
+RightAnchor = NodePath("RightAnchor")
+CenterAnchor = NodePath("CenterAnchor")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nywek")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TextLabel" type="Label" parent="PanelContainer/MarginContainer/CenterContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftAnchor" type="Marker2D" parent="."]
+position = Vector2(0, 57)
+
+[node name="RightAnchor" type="Marker2D" parent="."]
+position = Vector2(120, 57)
+
+[node name="DownAnchor" type="Marker2D" parent="."]
+position = Vector2(62, 119)
+
+[node name="UpAnchor" type="Marker2D" parent="."]
+position = Vector2(62, 0)
+
+[node name="CenterAnchor" type="Marker2D" parent="."]
+position = Vector2(60, 60)
+
+[node name="CircularLineTest" parent="." instance=ExtResource("2_o3iei")]
+Radius = 10.0

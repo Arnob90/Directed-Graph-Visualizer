@@ -4,7 +4,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 namespace RelationSpace;
-
+/// <summary>
+/// Represents an immutable mathematical relation between two sets (Domain and Codomain)
+/// </summary>
+/// <typeparam name="DomainType" The type of elements in Domain</typeparam>
+/// <typeparam name="CodomainType" The type of elements in Codomain</typeparam>
+/// <remarks>
+/// A relation is a subset of Domain*Codomain. This implemention is immutable and thread safe
+/// </remarks>
 public record Relation<DomainType, CodomainType> where DomainType : notnull where CodomainType : notnull
 {
     //We set it to private and use getter methods instead to avoid with expressions breaking relation
@@ -21,10 +28,12 @@ public record Relation<DomainType, CodomainType> where DomainType : notnull wher
         DomainSet = domainSet;
         RelationMap = relationMap.ToImmutableDictionary();
     }
+    ///<summary>Get the domain set of the relation</summary>
     public ImmutableHashSet<DomainType> GetDomainSet()
     {
         return DomainSet;
     }
+    ///<summary> Get the codomain set of the relation</summary>
     public ImmutableHashSet<CodomainType> GetCodomainSet()
     {
         return CodomainSet;
@@ -41,6 +50,8 @@ public record Relation<DomainType, CodomainType> where DomainType : notnull wher
         }
         return relationMap;
     }
+    /// <summary>Given a dictionary where the key indicates an element and the value is the set of all elements it is related to, convert it to a set of ordered pairs(standard form of relation)</summary>
+    /// <param name="mapForm"> A dictionary of which each key is mapped to everything it is related to. </param>
     public static IEnumerable<(DomainType, CodomainType)> ConvertRelationMapToNormalForm(IDictionary<DomainType, ImmutableHashSet<CodomainType>> mapForm)
     {
         var relationSet = ImmutableHashSet<(DomainType, CodomainType)>.Empty;

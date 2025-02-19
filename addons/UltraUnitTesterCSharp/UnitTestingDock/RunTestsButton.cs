@@ -18,6 +18,13 @@ public partial class RunTestsButton : Button
     }
     public void OnPress()
     {
-        ToAddTestsTo.RunTests();
+        if (!ToAddTestsTo.IsNodeReady())
+        {
+            ToAddTestsTo.Ready += () => { ToAddTestsTo.RunTests(); };
+        }
+        else
+        {
+            ToAddTestsTo.RunTests();
+        }
     }
 }
