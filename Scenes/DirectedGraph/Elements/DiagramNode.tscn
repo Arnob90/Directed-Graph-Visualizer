@@ -6,7 +6,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nywek"]
 bg_color = Color(0, 0, 0, 1)
 
-[node name="DiagramNode" type="Node2D" node_paths=PackedStringArray("TextLabel", "MainContainer", "UpAnchor", "DownAnchor", "LeftAnchor", "RightAnchor", "CenterAnchor")]
+[node name="DiagramNode" type="Node2D" node_paths=PackedStringArray("TextLabel", "MainContainer", "UpAnchor", "DownAnchor", "LeftAnchor", "RightAnchor", "CenterAnchor", "CircularLine")]
 script = ExtResource("1_xdcl3")
 TextLabel = NodePath("PanelContainer/MarginContainer/CenterContainer/TextLabel")
 MainContainer = NodePath("PanelContainer")
@@ -15,6 +15,7 @@ DownAnchor = NodePath("DownAnchor")
 LeftAnchor = NodePath("LeftAnchor")
 RightAnchor = NodePath("RightAnchor")
 CenterAnchor = NodePath("CenterAnchor")
+CircularLine = NodePath("CircularLineTest")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 offset_right = 40.0
@@ -54,4 +55,8 @@ position = Vector2(62, 0)
 position = Vector2(60, 60)
 
 [node name="CircularLineTest" parent="." instance=ExtResource("2_o3iei")]
-Radius = 10.0
+visible = false
+show_behind_parent = true
+position = Vector2(62, -48)
+Radius = 50.0
+StrokeWidth = 1.0

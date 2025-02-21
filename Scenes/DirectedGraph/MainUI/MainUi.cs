@@ -48,12 +48,13 @@ public partial class MainUi : Node2D
             var toStringRepr = to.ToString();
             var fromNode = stringReprToNodeMap[fromStringRepr];
             var toNode = stringReprToNodeMap[toStringRepr];
-            var fromNodePosition = fromNode.CenterAnchor.GlobalPosition;
-            var toNodePosition = toNode.CenterAnchor.GlobalPosition;
             if (fromNode == toNode)
             {
-
+                fromNode.MappedToSelf = true;
+                continue;
             }
+            var fromNodePosition = fromNode.CenterAnchor.GlobalPosition;
+            var toNodePosition = toNode.CenterAnchor.GlobalPosition;
             edgeLine.Points = new Vector2[] { fromNodePosition, toNodePosition };
             AddChild(edgeLine);
             //The line must be below the node themselves to give the illusion of them 

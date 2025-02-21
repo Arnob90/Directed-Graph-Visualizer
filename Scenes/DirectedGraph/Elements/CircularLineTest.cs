@@ -5,19 +5,18 @@ namespace CircleSpace;
 [Tool]
 public partial class CircularLineTest : Node2D
 {
+    [Export]
     public CircleLine Circle;
     float _Radius = 100;
     float _XStep = 0.05f;
+    float _StrokeWidth = 5;
     [Export]
     float XStep
     {
         set
         {
             _XStep = value;
-            if (Circle != null && Circle.IsNodeReady())
-            {
-                Circle.Radius = Radius;
-            }
+            CallDeferred(MethodName.RefreshCircleProperties);
         }
         get => _XStep;
     }
@@ -27,17 +26,28 @@ public partial class CircularLineTest : Node2D
         set
         {
             _Radius = value;
-            if (Circle != null && Circle.IsNodeReady())
-            {
-                Circle.Radius = Radius;
-            }
+            CallDeferred(MethodName.RefreshCircleProperties);
         }
         get => _Radius;
     }
+    [Export]
+    float StrokeWidth
+    {
+        set
+        {
+            _StrokeWidth = value;
+            CallDeferred(MethodName.RefreshCircleProperties);
+        }
+        get => _StrokeWidth;
+    }
     public override void _Ready()
     {
-        Circle = GetNode<CircleLine>("%CircleLine");
+        RefreshCircleProperties();
+    }
+    private void RefreshCircleProperties()
+    {
         Circle.Radius = Radius;
         Circle.XStep = XStep;
+        Circle.Width = StrokeWidth;
     }
 }
