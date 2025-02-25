@@ -56,4 +56,22 @@ public class BasicRelationParser
         }
         return new Relation<int, int>(finalResultSet, domainSet, domainSet);
     }
+    public static HashSet<int> ParseDomainSetFromStr(String domainSetString)
+    {
+        var trimmedDomainSetStr = domainSetString.Trim();
+        if (domainSetString[0] != '{' && domainSetString[domainSetString.Length - 1] != '}')
+        {
+            throw new ArgumentException("Domain set must be of form: {a1, a2, a3...,an} for some ints a1,a2,a3...,an");
+        }
+        var requiredSet = new HashSet<int>();
+        var domainSetRemovedBraces = domainSetString[1..^1];
+        var domainSetSplit = domainSetRemovedBraces.Split(',');
+        foreach (String elemStr in domainSetSplit)
+        {
+            var elemStrTrimmed = elemStr.Trim();
+            var elemNum = int.Parse(elemStrTrimmed);
+            requiredSet.Add(elemNum);
+        }
+        return requiredSet;
+    }
 }

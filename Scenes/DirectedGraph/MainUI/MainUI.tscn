@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://twoyfyao7a7o"]
+[gd_scene load_steps=13 format=3 uid="uid://twoyfyao7a7o"]
 
 [ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MainUi.cs" id="1_1bm7w"]
 [ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ExplorableCamera.cs" id="1_hbhh4"]
@@ -8,6 +8,19 @@
 [ext_resource type="PackedScene" uid="uid://brl07y0lo1qxy" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.tscn" id="3_5oloh"]
 [ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MouseZoomManager.cs" id="3_ceve0"]
 [ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ResetZoomButton.cs" id="3_q6lx8"]
+[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ImportButton.cs" id="9_ccik8"]
+
+[sub_resource type="Animation" id="Animation_57juc"]
+resource_name = "CollaspeButtonRotation"
+
+[sub_resource type="Animation" id="Animation_r25i0"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lg0kd"]
+_data = {
+"CollaspeButtonRotation": SubResource("Animation_57juc"),
+"RESET": SubResource("Animation_r25i0")
+}
 
 [node name="MainUi" type="Node2D"]
 script = ExtResource("1_1bm7w")
@@ -75,6 +88,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
+theme_override_constants/autohide = 0
 
 [node name="Control" type="Control" parent="CanvasLayer/VSplitContainer"]
 layout_mode = 2
@@ -96,11 +111,42 @@ tab_focus_mode = 1
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
 layout_mode = 2
-placeholder_text = "Import From Relation Directly"
+theme_override_constants/separation = 30
 
-[node name="ImportButton" type="Button" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+[node name="RelationEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Import From Relation Directly"
+max_length = 100
+caret_blink = true
+
+[node name="DomainEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Domain Edit"
+max_length = 100
+caret_blink = true
+
+[node name="Error Label" type="Label" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+autowrap_mode = 3
+
+[node name="ImportButton" type="Button" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import" node_paths=PackedStringArray("LabelToImportFrom", "DomainSetLabel", "MainUiWindow")]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Import"
+script = ExtResource("9_ccik8")
+LabelToImportFrom = NodePath("../HBoxContainer/RelationEdit")
+DomainSetLabel = NodePath("../HBoxContainer/DomainEdit")
+MainUiWindow = NodePath("../../../../../../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lg0kd")
+}

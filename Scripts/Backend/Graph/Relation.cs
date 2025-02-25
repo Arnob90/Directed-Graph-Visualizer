@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Godot;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -88,10 +89,15 @@ public record Relation<DomainType, CodomainType> where DomainType : notnull wher
     private static ImmutableDictionary<DomainType, ImmutableHashSet<CodomainType>> AddEdgeToRelationDict(ImmutableDictionary<DomainType, ImmutableHashSet<CodomainType>> relationDict, (DomainType, CodomainType) pair)
     {
         var (elem1, elem2) = pair;
+        GD.Print($"{{{elem1},{elem2}}}");
         if (relationDict.ContainsKey(elem1))
         {
             var val = relationDict[elem1];
-            return relationDict.Add(elem1, val.Add(elem2));
+            if (!val.Contains(elem2))
+            {
+                return relationDict.SetItem(elem1, val.Add(elem2));
+            }
+            return relationDict;
         }
         return relationDict.Add(elem1, ImmutableHashSet.Create<CodomainType>(elem2));
     }

@@ -9,6 +9,7 @@ using RelationSpace;
 using DiagramNodeSpace;
 using RelationParserSpace;
 using DirectionalLineSpace;
+namespace MainUISpace;
 public partial class MainUi : Node2D
 {
     [Export]
@@ -86,6 +87,7 @@ public partial class MainUi : Node2D
     }
     public override void _Ready()
     {
-        CreateDiagramNodesFromRelation(BasicRelationParser.ParseFromString("{(1,2),(3,4),(7,7)}", ImmutableHashSet.Create(1, 2, 3, 4, 7)));
+        GD.Print(System.Environment.ProcessId);
+        // CreateDiagramNodesFromRelation(BasicRelationParser.ParseFromString("{(1,2),(3,4),(7,7)}", ImmutableHashSet.Create(1, 2, 3, 4, 7)));
     }
 }
