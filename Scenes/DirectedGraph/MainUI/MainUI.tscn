@@ -26,6 +26,8 @@ _data = {
 script = ExtResource("1_1bm7w")
 DiagramNodeScene = ExtResource("2_gbbs1")
 DirectionalLineScene = ExtResource("3_5oloh")
+SingleDirectionalLineInfoPath = "res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.tres"
+BidirectionalLineInfoPath = "res://Scenes/Basic/DirectionalLine/BidirectionalLineInfo.tres"
 
 [node name="Label" type="Label" parent="."]
 anchors_preset = 8
@@ -118,6 +120,7 @@ theme_override_constants/separation = 30
 [node name="RelationEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "{(0, 0), (1, 0), (1, 2), (1, 3), (2, 0), (2, 1), (3, 2),(3, 0)}"
 placeholder_text = "Import From Relation Directly"
 max_length = 100
 caret_blink = true
@@ -125,6 +128,7 @@ caret_blink = true
 [node name="DomainEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+text = "{0, 1, 2, 3}"
 placeholder_text = "Domain Edit"
 max_length = 100
 caret_blink = true

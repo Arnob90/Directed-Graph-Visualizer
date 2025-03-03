@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4hvcafuccr41"]
+
+[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/ArrowDirectionalLine.cs" id="1_nm1gg"]
+
+[node name="ArrowDirectionalLine" type="Line2D"]
+points = PackedVector2Array(-69.4967, 39.6258, 0, 0, -69.4967, -39.6258)
+width = 2.0
+script = ExtResource("1_nm1gg")
+Length = 80.0
+AngleDegrees = 29.691

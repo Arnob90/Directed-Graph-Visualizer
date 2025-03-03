@@ -20,6 +20,10 @@ public partial class MainUi : Node2D
     Vector2 PositionOfFirstNode = new(120, 60);
     [Export]
     PackedScene DirectionalLineScene;
+    [Export(PropertyHint.File, "*.tres,")]
+    String SingleDirectionalLineInfoPath;
+    [Export(PropertyHint.File, "*.tres,")]
+    String BidirectionalLineInfoPath;
     public void CreateDiagramNodesFromRelation<DomainType>(Relation<DomainType, DomainType> givenRelation)
     {
         var domain = givenRelation.GetDomainSet();
@@ -41,10 +45,12 @@ public partial class MainUi : Node2D
         pairToStringReprMap = Misc.GetInverseDict(stringReprToPairMap);
         var numberOfChildren = GetChildCount();
         DistributeDiagramNodes(requiredNodes);
-        var relationSet = givenRelation.ConvertToNormalForm();
-        foreach (var (from, to) in relationSet)
+        var relationSet = givenRelation.ConvertToNormalForm().ToImmutableSortedSet();
+        for (int i = 0; i < relationSet.Count; ++i)
         {
-            var edgeLine = DirectionalLineScene.Instantiate<DirectionalLine>();
+            var (from, to) = relationSet[i];
+            //Construct a set with the previous elements
+            var previousSet = relationSet.Take(i);
             var fromStringRepr = from.ToString();
             var toStringRepr = to.ToString();
             var fromNode = stringReprToNodeMap[fromStringRepr];
@@ -54,9 +60,24 @@ public partial class MainUi : Node2D
                 fromNode.MappedToSelf = true;
                 continue;
             }
+            //Check if it already has bidirectional mapping
+            if (previousSet.Contains((to, from)))
+            {
+                continue;
+            }
             var fromNodePosition = fromNode.CenterAnchor.GlobalPosition;
             var toNodePosition = toNode.CenterAnchor.GlobalPosition;
+            var edgeLine = DirectionalLineScene.Instantiate<DirectionalLine>();
             edgeLine.Points = new Vector2[] { fromNodePosition, toNodePosition };
+            //Check symmetry
+            if (relationSet.Contains((to, from)))
+            {
+                edgeLine.Info = GD.Load<BidirectionalLineInfo>(BidirectionalLineInfoPath);
+            }
+            else
+            {
+                edgeLine.Info = GD.Load<SingleDirectionalLineInfo>(SingleDirectionalLineInfoPath);
+            }
             AddChild(edgeLine);
             //The line must be below the node themselves to give the illusion of them 
             MoveChild(edgeLine, numberOfChildren);

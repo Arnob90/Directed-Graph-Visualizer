@@ -1,90 +1,116 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using ArrowDirectionalLineSpace;
+using DirectionalLineSpace;
 namespace DirectionalLineSpace;
+[Tool]
 public partial class DirectionalLine : Line2D
 {
     Vector2[] previousPointsList = new Vector2[] { };
     double accumulatedTime = 0;
     [Export]
-    double rerenderEvery = 0.1;
+    double RerenderEvery = 0.1;
+    //Will be Dupelicate()'ed if necessary
+    [Export]
+    PackedScene ArrowScene;
+    private AbstractDirectionalLineInfo _Info;
+    [Export]
+    public AbstractDirectionalLineInfo Info
+    {
+        get => _Info;
+        set
+        {
+            _Info = value;
+            RequestRerender = true;
+        }
+    }
+    bool RequestRerender = false;
     public override void _Ready()
     {
     }
     public override void _Process(double delta)
     {
-        if (accumulatedTime >= rerenderEvery && Points.Length >= 2 && previousPointsList != Points)
+        if (accumulatedTime >= RerenderEvery)
         {
-            foreach (var child in GetChildren())
+            CleanupArrows();
+            if (Info == null || Points.Length != 2)
             {
-                child.QueueFree();
             }
-            for (int i = 0; i < Points.Length - 1; ++i)
+            else if (Points.Length == 2)
             {
-                var firstPoint = Points[i];
-                var secondPoint = Points[i + 1];
-                // DrawArrow(25, Mathf.DegToRad(43), (firstPoint, secondPoint));
-                DrawTriangle((firstPoint, secondPoint));
+                previousPointsList = Points.ToArray();
+                RequestRerender = false;
+                if (Info is SingleDirectionalLineInfo)
+                {
+                    DrawArrow((Points[0], Points[1]), Info.ToPlaceArrowOnLerp);
+                }
+                if (Info is BidirectionalLineInfo bidirectionalInfo)
+                {
+                    var toPlaceOn = bidirectionalInfo.ToPlaceArrowOnLerp;
+                    var toPlaceOnSecond = Mathf.Clamp(toPlaceOn + bidirectionalInfo.DistanceFromSecondArrowRatio, 0, 1);
+                    var toPlaceOnFirst = Mathf.Clamp(toPlaceOn - bidirectionalInfo.DistanceFromSecondArrowRatio, 0, 1);
+                    DrawArrow((Points[0], Points[1]), toPlaceOnFirst, true);
+                    DrawArrow((Points[0], Points[1]), toPlaceOnSecond, false);
+                }
             }
             accumulatedTime = 0;
-            previousPointsList = Points;
-            return;
         }
         accumulatedTime += delta;
     }
-    private void DrawArrow(float length, float angle, (Vector2, Vector2) pointPair)
-    {
-        var lengthSqared = Math.Pow(length, 2);
-        float offsetX = (float)(length / (Math.Sqrt(1 + Math.Pow(Math.Tan(angle), 2))));
-        var offsetY = (float)(Math.Sqrt(lengthSqared - (lengthSqared / (1 + Math.Pow(Math.Tan(angle), 2)))));
-        var offsetVec = new Vector2(offsetX, offsetY);
-        var (firstPoint, secondPoint) = pointPair;
-        var midpoint = (firstPoint + secondPoint) / 2;
-        var requiredArrow = midpoint - offsetVec;
-        var arrowLine = new Line2D();
-        arrowLine.GlobalPosition = GlobalPosition;
-        arrowLine.Points = new Vector2[] { midpoint, requiredArrow };
-        AddChild(arrowLine);
-        var secondArrowLine = (Line2D)arrowLine.Duplicate();
-        var offsetVecMirrored = (offsetVec with { X = -offsetVec.X });
-        var requiredArrowFlipped = midpoint + offsetVecMirrored;
-        secondArrowLine.Points = new Vector2[] { midpoint, requiredArrowFlipped };
-        AddChild(secondArrowLine);
-        arrowLine.Width = Width;
-        secondArrowLine.Width = Width;
-    }
-    private void DrawTriangle((Vector2, Vector2) pointPair)
+    private void DrawArrow((Vector2, Vector2) pointPair, float toPlaceArrowOnLerp = 0.5f, bool mirrored = false)
     {
         var (firstPoint, secondPoint) = pointPair;
-        var angleBetweenPoints = firstPoint.DirectionTo(secondPoint);
-        var perpendicular = (secondPoint - firstPoint).Normalized().Rotated(90);
-        var oppositePerpendicular = (secondPoint - firstPoint).Normalized().Rotated(-90);
-        var lineFunction = GetPointInLine(pointPair.Item1, pointPair.Item2);
-        var midpoint = lineFunction(0.5F);
-        var startPointOfTriangle = lineFunction(0.4F);
-        var upperPointOfTriangle = startPointOfTriangle + perpendicular * 50;
-        var lowerPointOfTriangle = startPointOfTriangle + oppositePerpendicular * 50;
-        var requiredTriangle = new Polygon2D();
-        requiredTriangle.Polygon = new Vector2[] { midpoint, upperPointOfTriangle, lowerPointOfTriangle, midpoint };
-        AddChild(requiredTriangle);
-
+        var toPlaceArrowOn = GetPointInLine(firstPoint, secondPoint)(toPlaceArrowOnLerp);
+        var arrow = ArrowScene.Instantiate<ArrowDirectionalLineSpace.ArrowDirectionalLine>();
+        var rotationAngle = firstPoint.DirectionTo(secondPoint).Angle();
+        arrow.Rotation = rotationAngle;
+        arrow.Length = 20;
+        arrow.GlobalPosition = toPlaceArrowOn;
+        arrow.Width = Width;
+        if (mirrored)
+        {
+            arrow.Scale = arrow.Scale with { X = -arrow.Scale.X };
+        }
+        AddChild(arrow);
     }
+    private void CleanupArrows()
+    {
+        foreach (var maybeArrow in GetChildren())
+        {
+            if (maybeArrow is ArrowDirectionalLine)
+            {
+                maybeArrow.QueueFree();
+            }
+        }
+    }
+    // private void DrawTriangle((Vector2, Vector2) pointPair)
+    // {
+    //     var (firstPoint, secondPoint) = pointPair;
+    //     var angleBetweenPoints = firstPoint.DirectionTo(secondPoint);
+    //     var perpendicular = (secondPoint - firstPoint).Normalized().Rotated(90);
+    //     var oppositePerpendicular = (secondPoint - firstPoint).Normalized().Rotated(-90);
+    //     var lineFunction = GetPointInLine(pointPair.Item1, pointPair.Item2);
+    //     var midpoint = lineFunction(0.5F);
+    //     var startPointOfTriangle = lineFunction(0.4F);
+    //     var upperPointOfTriangle = startPointOfTriangle + perpendicular * 50;
+    //     var lowerPointOfTriangle = startPointOfTriangle + oppositePerpendicular * 50;
+    //     var requiredTriangle = (Polygon2D)ToDrawPolygonWith.Duplicate();
+    //     OriginalPolygonDupelicates.Add(requiredTriangle);
+    //     requiredTriangle.Polygon = new Vector2[] { midpoint, upperPointOfTriangle, lowerPointOfTriangle, midpoint };
+    //     AddChild(requiredTriangle);
+    //
+    // }
     private Func<float, Vector2> GetPointInLine(Vector2 firstPoint, Vector2 secondPoint)
     {
-        return (float progress) => firstPoint + progress * (secondPoint - firstPoint);
-    }
-    private Line2D DrawPerpendicular(double length)
-    {
-        var firstPoint = Points[0];
-        var secondPoint = Points[1];
-        var secondLine = new Line2D();
-        var rotationPivot = new Node2D();
-        AddSibling(rotationPivot);
-        secondLine.Points = Points;
-        var midpoint = (secondPoint + firstPoint) / 2;
-        rotationPivot.Position = midpoint;
-        rotationPivot.AddChild(secondLine);
-        secondLine.GlobalPosition = GlobalPosition;
-        rotationPivot.RotationDegrees = 90;
-        return secondLine;
+        return (float progress) =>
+        {
+            if (!(0 <= progress && progress <= 1))
+            {
+                throw new ArgumentException("Lerp progress is out of range and must be between 0 and 1 inclusive");
+            }
+            return firstPoint + progress * (secondPoint - firstPoint);
+        };
     }
 }

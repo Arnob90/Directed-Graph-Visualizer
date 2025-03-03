@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BidirectionalLineInfo" load_steps=2 format=3 uid="uid://cx3anke0uswqj"]
+
+[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/BidirectionalLineInfo.cs" id="1_p5kfu"]
+
+[resource]
+script = ExtResource("1_p5kfu")
+DistanceFromSecondArrowRatio = 0.082
+ToPlaceArrowOnLerp = 0.5

@@ -1,8 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://brl07y0lo1qxy"]
+[gd_scene load_steps=5 format=3 uid="uid://brl07y0lo1qxy"]
 
 [ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.cs" id="1_bi4gh"]
+[ext_resource type="PackedScene" uid="uid://d4hvcafuccr41" path="res://Scenes/Basic/DirectionalLine/ArrowDirectionalLine.tscn" id="2_v76df"]
+[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.cs" id="3_ncv4v"]
+
+[sub_resource type="Resource" id="Resource_6h02w"]
+script = ExtResource("3_ncv4v")
+ToPlaceArrowOnLerp = 0.512
 
 [node name="DirectionalLine" type="Line2D"]
-points = PackedVector2Array(580, 387, 1270, 361)
+points = PackedVector2Array(192, 481, 1067, 423)
 width = 5.0
 script = ExtResource("1_bi4gh")
+RerenderEvery = 0.01
+ArrowScene = ExtResource("2_v76df")
+Info = SubResource("Resource_6h02w")

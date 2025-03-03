@@ -9,9 +9,8 @@ record NormalGraphNode<T>(T elem) : GraphNode where T : notnull
 {
 }
 record WeightedGraphNode<T>(T elem, double weight) : GraphNode where T : notnull;
-record DomainType<T> : IEnumerable<T> where T : notnull
+record DomainType<T>(HashSet<T> DomainSet) : IEnumerable<T> where T : notnull
 {
-    HashSet<T> DomainSet;
     public IEnumerator<T> GetEnumerator()
     {
         foreach (var elem in DomainSet)
