@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://brl07y0lo1qxy"]
 
-[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.cs" id="1_bi4gh"]
+[ext_resource type="Script" uid="uid://c8bja0av6hrqh" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.cs" id="1_bi4gh"]
 [ext_resource type="PackedScene" uid="uid://d4hvcafuccr41" path="res://Scenes/Basic/DirectionalLine/ArrowDirectionalLine.tscn" id="2_v76df"]
-[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.cs" id="3_ncv4v"]
+[ext_resource type="Script" uid="uid://d4i4ob0sp5yqw" path="res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.cs" id="3_ncv4v"]
 
 [sub_resource type="Resource" id="Resource_6h02w"]
 script = ExtResource("3_ncv4v")

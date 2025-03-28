@@ -3,6 +3,7 @@ using System;
 using System.Collections.Immutable;
 using MainUISpace;
 using RelationParserSpace;
+using NodeContainerSpace;
 public partial class ImportButton : Button
 {
     [Export]
@@ -10,7 +11,7 @@ public partial class ImportButton : Button
     [Export]
     LineEdit DomainSetLabel;
     [Export]
-    MainUi MainUiWindow;
+    NodeContainer ToContainDiagramNodeIn;
     public override void _Ready()
     {
         Pressed += ImportRelationFromText;
@@ -26,6 +27,7 @@ public partial class ImportButton : Button
         {
             return;
         }
-        MainUiWindow.CreateDiagramNodesFromRelation(BasicRelationParser.ParseFromString(LabelToImportFrom.Text, BasicRelationParser.ParseDomainSetFromStr(DomainSetLabel.Text).ToImmutableHashSet()));
+        var parsedRelation = BasicRelationParser.ParseFromString(LabelToImportFrom.Text, BasicRelationParser.ParseDomainSetFromStr(DomainSetLabel.Text).ToImmutableHashSet());
+        ToContainDiagramNodeIn.DisplayRelation(parsedRelation);
     }
 }

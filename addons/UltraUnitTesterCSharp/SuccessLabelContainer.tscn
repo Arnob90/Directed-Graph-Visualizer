@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dfl4q7qk7aq4"]
 
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/SuccessLabelContainer.cs" id="1_77u25"]
+[ext_resource type="Script" uid="uid://bg3ftux6e0sie" path="res://addons/UltraUnitTesterCSharp/SuccessLabelContainer.cs" id="1_77u25"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8j3w"]
 bg_color = Color(0.309545, 0.794806, 0, 1)

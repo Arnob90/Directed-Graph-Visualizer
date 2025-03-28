@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://qfp74wdam4oh"]
 
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/Elements/CircleLine.cs" id="1_a8d1u"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/Elements/CircularLineTest.cs" id="1_ctpgr"]
+[ext_resource type="Script" uid="uid://pg36ukcswj7" path="res://Scenes/DirectedGraph/Elements/CircleLine.cs" id="1_a8d1u"]
+[ext_resource type="Script" uid="uid://oqlpai1rioxt" path="res://Scenes/DirectedGraph/Elements/CircularLineTest.cs" id="1_ctpgr"]
 
 [node name="CircularLineTest" type="Node2D" node_paths=PackedStringArray("Circle")]
 script = ExtResource("1_ctpgr")

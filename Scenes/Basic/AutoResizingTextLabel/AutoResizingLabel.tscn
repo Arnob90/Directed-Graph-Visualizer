@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bdoefsb2ikfcr"]
 
-[ext_resource type="Script" path="res://Scenes/Basic/AutoResizingTextLabel/AutoResizingLabel.cs" id="1_qaoi0"]
+[ext_resource type="Script" uid="uid://cbeqgnf5tcp08" path="res://Scenes/Basic/AutoResizingTextLabel/AutoResizingLabel.cs" id="1_qaoi0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rpvd3"]
 

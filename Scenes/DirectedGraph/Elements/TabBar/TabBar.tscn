@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b26gc5so3eda4"]
 
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/Elements/TabBar/NetworkFileOpener.cs" id="1_u0pn8"]
+[ext_resource type="Script" uid="uid://b3hjb06a4wdq6" path="res://Scenes/DirectedGraph/Elements/TabBar/NetworkFileOpener.cs" id="1_u0pn8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jih6d"]
 bg_color = Color(0, 0.310755, 0.523758, 1)

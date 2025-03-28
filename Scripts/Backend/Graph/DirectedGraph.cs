@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections;
 using RelationSpace;
-abstract record GraphNode;
-record NormalGraphNode<T>(T elem) : GraphNode where T : notnull
+public abstract record GraphNode;
+public record NormalGraphNode<T>(T elem) : GraphNode where T : notnull
 {
 }
-record WeightedGraphNode<T>(T elem, double weight) : GraphNode where T : notnull;
-record DomainType<T>(HashSet<T> DomainSet) : IEnumerable<T> where T : notnull
+public record WeightedGraphNode<T>(T elem, double weight) : GraphNode where T : notnull;
+public record DomainType<T>(HashSet<T> DomainSet) : IEnumerable<T> where T : notnull
 {
     public IEnumerator<T> GetEnumerator()
     {
@@ -24,7 +24,7 @@ record DomainType<T>(HashSet<T> DomainSet) : IEnumerable<T> where T : notnull
     }
 }
 ///<summary>A directed graph of a relation over a Domain. Permits loops</summary>
-record DirectedGraph<T> where T : GraphNode
+public record DirectedGraph<T> where T : GraphNode
 {
     Relation<T, T> UnderlyingRelation { get; init; }
     public DirectedGraph(Relation<T, T> givenRelation)

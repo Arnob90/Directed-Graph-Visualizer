@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cct3yl5dsi4v4"]
 
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/TreeTest/TreeTestScene.cs" id="1_acmv8"]
+[ext_resource type="Script" uid="uid://mpmr6rvgsl6t" path="res://addons/UltraUnitTesterCSharp/TreeTest/TreeTestScene.cs" id="1_acmv8"]
 
 [node name="TreeTestScene" type="Tree"]
 anchors_preset = 15

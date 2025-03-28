@@ -29,6 +29,10 @@ public partial class DirectionalLine : Line2D
     bool RequestRerender = false;
     public override void _Ready()
     {
+		if(Info==null)
+		{
+			Info=new SingleDirectionalLineInfo();
+		}
     }
     public override void _Process(double delta)
     {

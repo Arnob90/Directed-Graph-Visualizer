@@ -1,47 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://twoyfyao7a7o"]
+[gd_scene load_steps=11 format=3 uid="uid://twoyfyao7a7o"]
 
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MainUi.cs" id="1_1bm7w"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ExplorableCamera.cs" id="1_hbhh4"]
+[ext_resource type="Script" uid="uid://ckf08epme3gq8" path="res://Scenes/DirectedGraph/MainUI/MainUi.cs" id="1_1bm7w"]
+[ext_resource type="Script" uid="uid://cqmrwc6g2ee4v" path="res://Scenes/DirectedGraph/MainUI/ExplorableCamera.cs" id="1_hbhh4"]
 [ext_resource type="Texture2D" uid="uid://dm5tjuuinhmf0" path="res://assets/LoopButton/LoopButtonSmall.png" id="2_1s3r6"]
 [ext_resource type="PackedScene" uid="uid://bdesiqvclib8t" path="res://Scenes/DirectedGraph/Elements/DiagramNode.tscn" id="2_gbbs1"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MouseMovementManager.cs" id="2_i7o4o"]
+[ext_resource type="Script" uid="uid://dknnqhxgvfhqx" path="res://Scenes/DirectedGraph/MainUI/MouseMovementManager.cs" id="2_i7o4o"]
 [ext_resource type="PackedScene" uid="uid://brl07y0lo1qxy" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.tscn" id="3_5oloh"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/MouseZoomManager.cs" id="3_ceve0"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ResetZoomButton.cs" id="3_q6lx8"]
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/MainUI/ImportButton.cs" id="9_ccik8"]
-
-[sub_resource type="Animation" id="Animation_57juc"]
-resource_name = "CollaspeButtonRotation"
-
-[sub_resource type="Animation" id="Animation_r25i0"]
-length = 0.001
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_lg0kd"]
-_data = {
-"CollaspeButtonRotation": SubResource("Animation_57juc"),
-"RESET": SubResource("Animation_r25i0")
-}
+[ext_resource type="Script" uid="uid://dbn16h7yoxswy" path="res://Scenes/DirectedGraph/MainUI/MouseZoomManager.cs" id="3_ceve0"]
+[ext_resource type="Script" uid="uid://lagedjp4xowp" path="res://Scenes/DirectedGraph/MainUI/ResetZoomButton.cs" id="3_q6lx8"]
+[ext_resource type="Script" uid="uid://dch2ov03adou5" path="res://Scenes/DirectedGraph/MainUI/ImportButton.cs" id="9_ccik8"]
+[ext_resource type="Script" uid="uid://badqfqppogy1g" path="res://Scenes/DirectedGraph/MainUI/NodeContainer.cs" id="10_xrgqi"]
 
 [node name="MainUi" type="Node2D"]
 script = ExtResource("1_1bm7w")
-DiagramNodeScene = ExtResource("2_gbbs1")
-DirectionalLineScene = ExtResource("3_5oloh")
-SingleDirectionalLineInfoPath = "res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.tres"
-BidirectionalLineInfoPath = "res://Scenes/Basic/DirectionalLine/BidirectionalLineInfo.tres"
-
-[node name="Label" type="Label" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 927.0
-offset_top = 517.0
-offset_right = 1007.0
-offset_bottom = 540.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "I'm a label"
 
 [node name="ExplorableCamera" type="Camera2D" parent="."]
 position = Vector2(960, 540)
@@ -84,40 +55,37 @@ ZoomLabel = NodePath("../CanvasLayer/HBoxContainer/HFlowContainer/ZoomLabel")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="VSplitContainer" type="VSplitContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-theme_override_constants/autohide = 0
-
-[node name="Control" type="Control" parent="CanvasLayer/VSplitContainer"]
-layout_mode = 2
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 948.0
 size_flags_vertical = 3
+mouse_filter = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+offset_top = 956.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/VSplitContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="TabContainer" type="TabContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer"]
+[node name="TabContainer" type="TabContainer" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 current_tab = 0
 tab_focus_mode = 1
 
-[node name="Import" type="VBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer"]
+[node name="Import" type="VBoxContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Import"]
 layout_mode = 2
 theme_override_constants/separation = 30
 
-[node name="RelationEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
+[node name="RelationEdit" type="LineEdit" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "{(0, 0), (1, 0), (1, 2), (1, 3), (2, 0), (2, 1), (3, 2),(3, 0)}"
@@ -125,7 +93,7 @@ placeholder_text = "Import From Relation Directly"
 max_length = 100
 caret_blink = true
 
-[node name="DomainEdit" type="LineEdit" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
+[node name="DomainEdit" type="LineEdit" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Import/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "{0, 1, 2, 3}"
@@ -133,7 +101,7 @@ placeholder_text = "Domain Edit"
 max_length = 100
 caret_blink = true
 
-[node name="Error Label" type="Label" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import"]
+[node name="Error Label" type="Label" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Import"]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
@@ -141,16 +109,19 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 autowrap_mode = 3
 
-[node name="ImportButton" type="Button" parent="CanvasLayer/VSplitContainer/PanelContainer/VBoxContainer/TabContainer/Import" node_paths=PackedStringArray("LabelToImportFrom", "DomainSetLabel", "MainUiWindow")]
+[node name="ImportButton" type="Button" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Import" node_paths=PackedStringArray("LabelToImportFrom", "DomainSetLabel", "ToContainDiagramNodeIn")]
 layout_mode = 2
-size_flags_horizontal = 0
 text = "Import"
+alignment = 0
 script = ExtResource("9_ccik8")
 LabelToImportFrom = NodePath("../HBoxContainer/RelationEdit")
 DomainSetLabel = NodePath("../HBoxContainer/DomainEdit")
-MainUiWindow = NodePath("../../../../../../..")
+ToContainDiagramNodeIn = NodePath("../../../../../../NodeContainer")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_lg0kd")
-}
+[node name="NodeContainer" type="Node2D" parent="." node_paths=PackedStringArray("LineContainer")]
+script = ExtResource("10_xrgqi")
+DiagramNodeScene = ExtResource("2_gbbs1")
+DirectionalLineScene = ExtResource("3_5oloh")
+LineContainer = NodePath("LineContainer")
+
+[node name="LineContainer" type="Node2D" parent="NodeContainer"]

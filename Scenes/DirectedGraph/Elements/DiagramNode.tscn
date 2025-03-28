@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://bdesiqvclib8t"]
+[gd_scene load_steps=5 format=3 uid="uid://bdesiqvclib8t"]
 
-[ext_resource type="Script" path="res://Scenes/DirectedGraph/Elements/DiagramNode.cs" id="1_xdcl3"]
+[ext_resource type="Script" uid="uid://cqat7vo86aoq1" path="res://Scenes/DirectedGraph/Elements/DiagramNode.cs" id="1_xdcl3"]
 [ext_resource type="PackedScene" uid="uid://qfp74wdam4oh" path="res://Scenes/DirectedGraph/Elements/CircularLineTest.tscn" id="2_o3iei"]
+[ext_resource type="Script" uid="uid://cd0ohyjcqyqjw" path="res://Scenes/DirectedGraph/Elements/MouseDetector.cs" id="3_k5wtt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nywek"]
 bg_color = Color(0, 0, 0, 1)
 
-[node name="DiagramNode" type="Node2D" node_paths=PackedStringArray("TextLabel", "MainContainer", "UpAnchor", "DownAnchor", "LeftAnchor", "RightAnchor", "CenterAnchor", "CircularLine")]
+[node name="DiagramNode" type="Node2D" node_paths=PackedStringArray("TextLabel", "MainContainer", "UpAnchor", "DownAnchor", "LeftAnchor", "RightAnchor", "CenterAnchor", "CircularLine", "Border", "MouseDetector")]
 script = ExtResource("1_xdcl3")
 TextLabel = NodePath("PanelContainer/MarginContainer/CenterContainer/TextLabel")
 MainContainer = NodePath("PanelContainer")
@@ -16,10 +17,13 @@ LeftAnchor = NodePath("LeftAnchor")
 RightAnchor = NodePath("RightAnchor")
 CenterAnchor = NodePath("CenterAnchor")
 CircularLine = NodePath("CircularLineTest")
+Border = NodePath("Border")
+MouseDetector = NodePath("MouseDetector")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nywek")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
@@ -31,6 +35,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextLabel" type="Label" parent="PanelContainer/MarginContainer/CenterContainer"]
 unique_name_in_owner = true
@@ -60,3 +65,17 @@ show_behind_parent = true
 position = Vector2(62, -48)
 Radius = 50.0
 StrokeWidth = 1.0
+
+[node name="Border" type="Line2D" parent="."]
+visible = false
+modulate = Color(0.625247, 0.721849, 3.85046e-07, 1)
+points = PackedVector2Array(0, 0, 120, 0, 120, 120, 0, 120)
+closed = true
+width = 5.0
+
+[node name="MouseDetector" type="Area2D" parent="." node_paths=PackedStringArray("ParentToDetect")]
+script = ExtResource("3_k5wtt")
+ParentToDetect = NodePath("..")
+
+[node name="MouseCollision" type="CollisionPolygon2D" parent="MouseDetector"]
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 120, 0, 120)

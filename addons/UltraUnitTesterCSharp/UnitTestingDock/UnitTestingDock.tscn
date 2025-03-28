@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://d1dtleug3daii"]
 
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/UnitTestingDock.cs" id="1_j62h7"]
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RunTestsButton.cs" id="1_qpvqc"]
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/TestResultContainer.cs" id="2_ghcl8"]
-[ext_resource type="Script" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RefreshButton.cs" id="4_6wf0e"]
+[ext_resource type="Script" uid="uid://cr70ir8kv7ri0" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/UnitTestingDock.cs" id="1_j62h7"]
+[ext_resource type="Script" uid="uid://c22pd0ulsmnmy" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RunTestsButton.cs" id="1_qpvqc"]
+[ext_resource type="Script" uid="uid://cccrxlkfllp25" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/TestResultContainer.cs" id="2_ghcl8"]
+[ext_resource type="Script" uid="uid://bndpk8mfih35v" path="res://addons/UltraUnitTesterCSharp/UnitTestingDock/RefreshButton.cs" id="4_6wf0e"]
 
 [node name="UnitTestingDock" type="PanelContainer"]
 anchors_preset = 15

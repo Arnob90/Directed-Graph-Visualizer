@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwxatjxvdfi2f"]
 
-[ext_resource type="Script" path="res://Scenes/Tests/CurveDraw.cs" id="1_51w6x"]
+[ext_resource type="Script" uid="uid://di7mk8dccm2o2" path="res://Scenes/Tests/CurveDraw.cs" id="1_51w6x"]
 
 [sub_resource type="Curve2D" id="Curve2D_x1mis"]
 bake_interval = 500.0

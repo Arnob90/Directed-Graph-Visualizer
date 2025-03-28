@@ -1,6 +1,6 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://t5ax0ovg0p37"]
+[gd_resource type="Resource" script_class="SingleDirectionalLineInfo" load_steps=2 format=3 uid="uid://t5ax0ovg0p37"]
 
-[ext_resource type="Script" path="res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.cs" id="1_8ap1j"]
+[ext_resource type="Script" uid="uid://d4i4ob0sp5yqw" path="res://Scenes/Basic/DirectionalLine/SingleDirectionalLineInfo.cs" id="1_8ap1j"]
 
 [resource]
 script = ExtResource("1_8ap1j")
