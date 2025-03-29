@@ -1,4 +1,5 @@
 using Godot;
+using Optional;
 using System;
 using System.Collections.Generic;
 namespace MiscSpace;
@@ -15,5 +16,16 @@ public partial class Misc
             }
         }
         return requiredInverseMap;
+    }
+}
+public static class OptionExtensions
+{
+    public static Option<T> FromNullable<T>(this T nullable) where T:class
+    {
+        return nullable == null ? Option.None<T>() : Option.Some(nullable);
+    }
+    public static Option<T> FromNullable<T>(this T? nullable) where T:struct
+    {
+        return nullable == null ? Option.None<T>() : Option.Some((T)nullable);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Godot;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,95 +8,84 @@ using RelationSpace;
 using TypeRegistrySpace;
 using Optional;
 using Optional.Unsafe;
+using MiscSpace;
 namespace RelationSerializerSpace;
 ///<summary> A class which stores info about relation. Designed to be trivial to export to JSON, or any other format. The str is of form "{elemStrRepr:TypeSerializer,...}"</summary>
-public record IntermediateFormatToSerializeTo(String DomainSetStr, String CodomanSetStr, String RelationSetStr)
-{
-}
+public record IntermediateFormatToSerializeTo(HashSetSerialized DomainSet,HashSetSerialized CodomainSet,String[] RelationMapStr);
+public record HashSetSerialized(String[] SetStr,String TypeStr);
 public class RelationSerializer
 {
-    private object DeserializePairStr(String givenPair)
+    private Option<HashSetSerialized> SerializeHashSetToStr<T>(ImmutableHashSet<T> givenSet)
     {
-        //We take the last colon, knowing that the AssemblyQualifiedName of a type can never have a colon
-        var lastColonIndex = givenPair.LastIndexOf(':');
-        var elemStr = givenPair[..lastColonIndex];
-        var typeSerializerStr = givenPair[(lastColonIndex)..];
-        var typeSerializerT = TypeSerializationRegistry.GetTypeSerializerFromRegisteredStr(typeSerializerStr).ValueOrFailure("Given value's type is not registered");
-        var typeSerializer = Activator.CreateInstance(typeSerializerT);
-        var elem = typeSerializerT.GetMethod("DeserializeFromString").Invoke(typeSerializer, new object[] { elemStr });
-        return elem;
-    }
-    private String SerializeHashSetToString<T>(ImmutableHashSet<T> givenHashSet, ITypeSerializer<T> serializer)
-    {
-        if (givenHashSet.Count == 0)
+        var typeSerializer=TypeSerializationRegistry.GetTypeSerializerForType<T>();
+        typeSerializer.Match(
+                some:(_)=>{},
+                none:()=>GD.PrintErr("Type is not registered")
+        );
+        var serializedSetStr=typeSerializer.Map((serializer)=>
         {
-            return "{}";
-        }
-        var builder = new StringBuilder("{");
-        foreach (var elem in givenHashSet)
-        {
-            builder.Append($"{serializer.SerializeFrom(elem)}:{TypeSerializationRegistry.GetTypeStrForRegisteredTypeSerializer<T>()},");
-        }
-        builder.Remove(builder.Length - 1, 1).Append("}");
-        return builder.ToString();
-    }
-    ///<summary> The string must be of form "{elemStrRepr:TypeSerializer,...} Returns a ImmutableHashSet<TypeSerializer> containing the elements. Make sure to cast it before use"</summary>
-    private object DeserializeHashSetFromString(String str)
-    {
-        str = str.Trim();
-        if (str.First() != '{' || str.Last() != '}')
-        {
-            throw new ArgumentException("Domain set must be of form {...}");
-        }
-        if (str == "{}")
-        {
-            throw new ArgumentException("Set is empty, so no type information can be deduced");
-        }
-        var strWithoutBraces = str[1..^1];
-    }
-    public Option<IntermediateFormatToSerializeTo> SerializeToString<DomainType, CodomainType>(Relation<DomainType, CodomainType> givenRelation)
-    {
-        var domainSetSerializer = TypeSerializationRegistry.GetTypeSerializerForType<DomainType>();
-        var codomainSetSerializer = TypeSerializationRegistry.GetTypeSerializerForType<CodomainType>();
-        var domainSetStr = domainSetSerializer.Map((serializer) => SerializeHashSetToString(givenRelation.GetDomainSet(), serializer));
-        var codomainSetStr = codomainSetSerializer.Map((serializer) => SerializeHashSetToString(givenRelation.GetCodomainSet(), serializer));
-        if (givenRelation.Count() == 0)
-        {
-            return Option.Some(new IntermediateFormatToSerializeTo(domainSetStr.ValueOrFailure("Failed to serialize domain set"), codomainSetStr.ValueOrFailure("Failed to serialize codomain set"), "{}"));
-
-        }
-        var setForm = givenRelation.ConvertToNormalForm();
-        var relationBuilder = new StringBuilder("{");
-        foreach (var pair in setForm)
-        {
-            var (first, second) = pair;
-            var firstSerializer = TypeSerializationRegistry.GetTypeSerializerFromRegisteredStr(first.GetType().AssemblyQualifiedName).Map((serializerT) => Activator.CreateInstance(serializerT));
-            var secondSerializer = TypeSerializationRegistry.GetTypeSerializerFromRegisteredStr(second.GetType().AssemblyQualifiedName).Map((serializerT) => Activator.CreateInstance(serializerT));
-            if (!firstSerializer.HasValue || !secondSerializer.HasValue)
+            List<String> requiredStrRepr=new();
+            foreach(var elem in givenSet)
             {
-                throw new ArgumentException($"Invalid type of domain or codomain, or types of domain and codomain are not registered.");
+                requiredStrRepr.Add(serializer.SerializeFrom(elem));
             }
-            var firstStrOption = firstSerializer.Map((serializer) => ((ITypeSerializer<DomainType>)serializer).SerializeFrom(first));
-            var secondStrOption = secondSerializer.Map((serializer) => ((ITypeSerializer<CodomainType>)serializer).SerializeFrom(second));
-            var firstStr = firstStrOption.ValueOrFailure("Failed to serialize first element");
-            var secondStr = secondStrOption.ValueOrFailure("Failed to serialize second element");
-            relationBuilder.Append($"{firstStr}:{secondStr},");
-        }
-        relationBuilder.Remove(relationBuilder.Length - 1, 1);
-        relationBuilder.Append("}");
-        return Option.Some<IntermediateFormatToSerializeTo>(new IntermediateFormatToSerializeTo(domainSetStr.ValueOrFailure("Failed to serialize domain set"), codomainSetStr.ValueOrFailure("Failed to serialize codomain set"), relationBuilder.ToString()));
+            return requiredStrRepr;
+        });
+        var serializedSet=serializedSetStr.Map((setRepr)=>new HashSetSerialized(setRepr.ToArray(),TypeSerializationRegistry.GetStringReprForType<T>()));
+        return serializedSet;
     }
-    public Option<object> DeserializeFromString(IntermediateFormatToSerializeTo serialized)
+    private ImmutableHashSet<T> DeserializeHashSetFromStr<T>(HashSetSerialized givenSet,ITypeSerializer<T> typeSerializer)
     {
-        var domain = serialized.DomainSetStr;
-        var codomain = serialized.CodomanSetStr;
-        if (domain.First() != '{' || codomain.First() != '{' || domain.Last() != '}' || codomain.Last() != '}')
+        var requiredSet=ImmutableHashSet<T>.Empty;
+        foreach(var elem in givenSet.SetStr)
+        {
+            requiredSet=requiredSet.Add(typeSerializer.DeserializeFromString(elem));
+        }
+        return requiredSet;
+    }
+    private Option<object> DeserializeHashSetFromStr(HashSetSerialized givenSet)
+    {
+        var typeSerializerT=TypeSerializationRegistry.GetTypeSerializerFromRegisteredStr(givenSet.TypeStr);
+        var typeSerializer=typeSerializerT.Map((typeSerializerT)=>Activator.CreateInstance(typeSerializerT));
+        var typeToBeSerialized=typeSerializerT.Map((typeSerializerT)=>typeSerializerT.GetInterface(typeof(ITypeSerializer<>).Name).GetGenericArguments()[0]);
+        if(!(typeToBeSerialized.HasValue && typeSerializer.HasValue))
         {
             return Option.None<object>();
         }
-        var domainElements = domain[1..^1];
-        var codomainElements = codomain[1..^1];
-        var domainSetDeserialized = domainElements.Split(',').Select((elem) => elem.Trim());
-        var codomainSetDeserialized = codomainElements.Split(',').Select((elem) => elem.Trim());
+        var typeToBeSerializedKnown=typeToBeSerialized.ValueOrFailure();
+        var typeSerializerKnown=typeSerializer.ValueOrFailure();
+        var otherMethodToCall=this.GetType().GetMethods().Where((m)=>m.Name=="DeserializeHashSetFromStr" && m.IsGenericMethod && m.GetParameters().Length==2).First();
+        return Option.Some<object>(otherMethodToCall.MakeGenericMethod(typeToBeSerializedKnown).Invoke(this,new object[]{givenSet,typeSerializerKnown}));
+    }
+    public Option<IntermediateFormatToSerializeTo> SerializeRelationToIntermediateFormat<DomainType,CodomainType>(Relation<DomainType,CodomainType> relation)
+    {
+        var domainSerialized=SerializeHashSetToStr<DomainType>(relation.GetDomainSet());
+        var codomainSerialized=SerializeHashSetToStr<CodomainType>(relation.GetCodomainSet());
+        if(!domainSerialized.HasValue || !codomainSerialized.HasValue)
+        {
+            return Option.None<IntermediateFormatToSerializeTo>();
+        }
+        var domainSerializedKnown=domainSerialized.ValueOrFailure();
+        var codomainSerializedKnown=codomainSerialized.ValueOrFailure();
+        if(relation.RelationMap.Count==0)
+        {
+            return Option.Some<IntermediateFormatToSerializeTo>(new IntermediateFormatToSerializeTo(domainSerializedKnown,codomainSerializedKnown,new String[]{}));
+        }
+        var domainTypeSerializer=TypeSerializationRegistry.GetTypeSerializerForType<DomainType>();
+        var codomainTypeSerializer=TypeSerializationRegistry.GetTypeSerializerForType<CodomainType>();
+        var finalRelation=new List<String>();
+        foreach(var (domainElem,codomainElem) in relation.ConvertToNormalForm())
+        {
+            var domainElemSerialized=domainTypeSerializer.Map((serializer)=>serializer.SerializeFrom(domainElem));
+            var codomainElemSerialized=codomainTypeSerializer.Map((serializer)=>serializer.SerializeFrom(codomainElem));
+            if(!(domainElemSerialized.HasValue && codomainElemSerialized.HasValue))
+            {
+                throw new ArgumentException("Type is not registered, or serialization failed");
+            }
+            var domainElemSerializedKnown=domainElemSerialized.ValueOrFailure();
+            var codomainElemSerializedKnown=codomainElemSerialized.ValueOrFailure();
+            finalRelation.Add($"({domainElemSerializedKnown},{codomainElemSerializedKnown})");
+        }
+        return Option.Some<IntermediateFormatToSerializeTo>(new IntermediateFormatToSerializeTo(domainSerializedKnown,codomainSerializedKnown,finalRelation.ToArray()));
     }
 }

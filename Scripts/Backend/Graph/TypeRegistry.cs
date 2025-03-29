@@ -62,8 +62,8 @@ public partial class TypeSerializationRegistry
     }
     public TypeSerializationRegistry Register<T>(ITypeSerializer<T> givenSerializer)
     {
-        TypeSerializerLookup.Add(typeof(T).AssemblyQualifiedName, givenSerializer.GetType());
-        InverseTypeSerializerLookup.Add(givenSerializer.GetType(), typeof(T).AssemblyQualifiedName);
+        TypeSerializerLookup.Add(GetStringReprForType<T>(), givenSerializer.GetType());
+        InverseTypeSerializerLookup.Add(givenSerializer.GetType(), GetStringReprForType<T>());
         return this;
     }
     public static Option<String> GetTypeStrForRegisteredTypeSerializer(Type givenT)
@@ -80,10 +80,18 @@ public partial class TypeSerializationRegistry
     }
     public static Option<Type> GetTypeSerializerForType(Type givenT)
     {
-        return TypeSerializerLookup.ContainsKey(givenT.AssemblyQualifiedName) ? Option.Some(TypeSerializerLookup[givenT.AssemblyQualifiedName]) : Option.None<Type>();
+        return TypeSerializerLookup.ContainsKey(GetStringReprForType(givenT)) ? Option.Some(TypeSerializerLookup[GetStringReprForType(givenT)]) : Option.None<Type>();
     }
     public static Option<ITypeSerializer<T>> GetTypeSerializerForType<T>()
     {
         return GetTypeSerializerForType(typeof(T)).Map((type) => (ITypeSerializer<T>)Activator.CreateInstance(type));
+    }
+    public static String GetStringReprForType(Type givenT)
+    {
+        return givenT.Name;
+    }
+    public static String GetStringReprForType<T>()
+    {
+        return GetStringReprForType(typeof(T));
     }
 }
