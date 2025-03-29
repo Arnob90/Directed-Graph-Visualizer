@@ -19,3 +19,4 @@ Please use this software at your own risk, primarily for testing, feedback, or c
 ## About
 
 This project aims to be a tool for visualizing directed graphs. The eventual goal is to provide clear representations of graph structures, including specialized layouts for visualizing [Hasse diagrams](https://en.wikipedia.org/wiki/Hasse_diagram) based on partial orders.
+Written in godot(c#)
