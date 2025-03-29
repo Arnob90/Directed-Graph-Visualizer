@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://twoyfyao7a7o"]
+[gd_scene load_steps=12 format=3 uid="uid://twoyfyao7a7o"]
 
 [ext_resource type="Script" uid="uid://ckf08epme3gq8" path="res://Scenes/DirectedGraph/MainUI/MainUi.cs" id="1_1bm7w"]
 [ext_resource type="Script" uid="uid://cqmrwc6g2ee4v" path="res://Scenes/DirectedGraph/MainUI/ExplorableCamera.cs" id="1_hbhh4"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://brl07y0lo1qxy" path="res://Scenes/Basic/DirectionalLine/DirectionalLine.tscn" id="3_5oloh"]
 [ext_resource type="Script" uid="uid://dbn16h7yoxswy" path="res://Scenes/DirectedGraph/MainUI/MouseZoomManager.cs" id="3_ceve0"]
 [ext_resource type="Script" uid="uid://lagedjp4xowp" path="res://Scenes/DirectedGraph/MainUI/ResetZoomButton.cs" id="3_q6lx8"]
+[ext_resource type="PackedScene" uid="uid://bycf31l144h5f" path="res://Scenes/DirectedGraph/Elements/GraphNodeElement.tscn" id="8_vxnkj"]
 [ext_resource type="Script" uid="uid://dch2ov03adou5" path="res://Scenes/DirectedGraph/MainUI/ImportButton.cs" id="9_ccik8"]
 [ext_resource type="Script" uid="uid://badqfqppogy1g" path="res://Scenes/DirectedGraph/MainUI/NodeContainer.cs" id="10_xrgqi"]
 
@@ -67,6 +68,7 @@ mouse_filter = 1
 offset_top = 956.0
 offset_right = 1920.0
 offset_bottom = 1080.0
+size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PanelContainer"]
@@ -74,10 +76,11 @@ layout_mode = 2
 
 [node name="TabContainer" type="TabContainer" parent="CanvasLayer/PanelContainer/VBoxContainer"]
 layout_mode = 2
-current_tab = 0
+current_tab = 1
 tab_focus_mode = 1
 
 [node name="Import" type="VBoxContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -117,6 +120,15 @@ script = ExtResource("9_ccik8")
 LabelToImportFrom = NodePath("../HBoxContainer/RelationEdit")
 DomainSetLabel = NodePath("../HBoxContainer/DomainEdit")
 ToContainDiagramNodeIn = NodePath("../../../../../../NodeContainer")
+
+[node name="Elements" type="ScrollContainer" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="GraphNodeElement" parent="CanvasLayer/PanelContainer/VBoxContainer/TabContainer/Elements" instance=ExtResource("8_vxnkj")]
+layout_mode = 2
+size_flags_horizontal = 3
+script = null
 
 [node name="NodeContainer" type="Node2D" parent="." node_paths=PackedStringArray("LineContainer")]
 script = ExtResource("10_xrgqi")

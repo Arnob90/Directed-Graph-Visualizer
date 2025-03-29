@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bycf31l144h5f"]
+
+[ext_resource type="Script" uid="uid://bgrav4cuj2mvy" path="res://Scenes/DirectedGraph/Elements/GraphNodeElement.cs" id="1_rnbr8"]
+
+[node name="GraphNodeElement" type="PanelContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+script = ExtResource("1_rnbr8")
+ElemStrRepr = "Amogus"
+
+[node name="MainLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Amogus"
