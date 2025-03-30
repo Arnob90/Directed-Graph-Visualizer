@@ -3,8 +3,8 @@ using Godot;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using RelationSpace; 
-using TypeRegistrySpace; 
+using RelationSpace;
+using TypeRegistrySpace;
 using Optional; // Library for handling optional values
 using Optional.Unsafe; // For Option.ValueOrFailure()
 
@@ -20,14 +20,34 @@ namespace RelationSerializerSpace;
 /// <param name="DomainSet">The serialized representation of the relation's domain set.</param>
 /// <param name="CodomainSet">The serialized representation of the relation's codomain set.</param>
 /// <param name="RelationMapStr">An array of strings, where each string represents a single pair (tuple) in the relation, typically formatted as "(serializedDomainElement,serializedCodomainElement)".</param>
-public record IntermediateFormatToSerializeTo(HashSetSerialized DomainSet, HashSetSerialized CodomainSet, String[] RelationMapStr);
+public class IntermediateFormatToSerializeTo
+{
+    public HashSetSerialized DomainSet { get; set; }
+    public HashSetSerialized CodomainSet { get; set; }
+    public String[] RelationMapStr { get; set; }
+    public IntermediateFormatToSerializeTo(HashSetSerialized domainSet, HashSetSerialized codomainSet, String[] relationMapStr)
+    {
+        DomainSet = domainSet;
+        CodomainSet = codomainSet;
+        RelationMapStr = relationMapStr;
+    }
+}
 
 /// <summary>
 /// Defines the serialized representation of a HashSet.
 /// </summary>
 /// <param name="SetStr">An array of strings, where each string is the serialized representation of an element in the set.</param>
 /// <param name="TypeStr">A string identifier representing the Type of the elements in the set (obtained from TypeSerializationRegistry).</param>
-public record HashSetSerialized(String[] SetStr, String TypeStr);
+public class HashSetSerialized
+{
+    public String[] SetStr { get; set; }
+    public String TypeStr { get; set; }
+    public HashSetSerialized(String[] setStr, String typeStr)
+    {
+        SetStr = setStr;
+        TypeStr = typeStr;
+    }
+}
 
 /// <summary>
 /// Provides methods to serialize Relation objects

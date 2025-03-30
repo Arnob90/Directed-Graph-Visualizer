@@ -13,7 +13,7 @@ public partial class GraphNodeElement : PanelContainer
             _ElemStrRepr=value;
             if(IsNodeReady())
             {
-            	RefreshProperties();
+				MainLabel.Text=value;
             }
         }
 	}
@@ -21,10 +21,6 @@ public partial class GraphNodeElement : PanelContainer
 	public override void _Ready()
 	{
 		MainLabel=GetNode<Label>("%MainLabel");
-		RefreshProperties();
-	}
-	private void RefreshProperties()
-	{
 		MainLabel.Text=ElemStrRepr;
 	}
 }
