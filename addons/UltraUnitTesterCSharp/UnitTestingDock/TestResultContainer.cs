@@ -12,10 +12,10 @@ namespace UltraUnitTesterSpace.UiSpace;
 public partial class TestResultContainer : Tree
 {
     TreeItem Root;
-    List<MethodInfo> Functions;
+    List<String> FunctionNames;
     public override void _Ready()
     {
-        Functions = new();
+        FunctionNames = new();
         Root = CreateItem();
         HideRoot = true;
         RefreshFunctionList();
@@ -30,15 +30,29 @@ public partial class TestResultContainer : Tree
         ClearFunctionInfo();
         foreach (var method in TestRunner.FindMethodsToTest())
         {
-            Functions.Add(method);
+            FunctionNames.Add($"{method.Name}:{method.DeclaringType.AssemblyQualifiedName}");
             var child = Root.CreateChild();
             child.SetText(0, $"{method.Name}:{method.DeclaringType.FullName}");
         }
     }
+	private static MethodInfo GetMethodFromName(String methodName)
+	{
+		var methodsToTest=TestRunner.FindMethodsToTest();
+		var requiredMethods=methodsToTest.Where((method)=>$"{method.Name}:{method.DeclaringType.AssemblyQualifiedName}"==methodName);
+		if(requiredMethods.Count()>1)
+		{
+			throw new InvalidOperationException($"Name collision between methods. Method name is ${methodName}");
+		}
+		if(requiredMethods.Count()==0)
+		{
+			throw new InvalidOperationException($"Required method ${methodName} is absent. Check if the code has changed with refreshing");
+		}
+		return requiredMethods.First();
+	}
     public void RunTests()
     {
         RefreshFunctionList();
-        var testResults = TestRunner.RunTests(Functions);
+        var testResults = TestRunner.RunTests(FunctionNames.Select((functionName)=>GetMethodFromName(functionName)));
         var nextNode = Root.GetFirstChild();
         int i = 0;
         while (nextNode != null)
